@@ -1,0 +1,18 @@
+# Core Python packages
+numpy
+pandas
+
+# Machine Learning libraries
+scikit-learn
+xgboost
+joblib
+
+# Web app framework
+streamlit
+
+# Optional: For animations (if you’re using Lottie files)
+streamlit-lottie
+
+# For visualization (optional, if used)
+matplotlib
+seaborn
