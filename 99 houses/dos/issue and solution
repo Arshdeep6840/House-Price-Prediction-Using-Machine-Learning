@@ -1,0 +1,62 @@
+### 📄 Real Estate Pricing & Ratings Data — Documentation
+
+#### ✅ ISSUE 1: Mismatched Area and Price per sq.ft.
+
+**Problem:** Total price must always equal `Area × Price_per_sq.ft.` Changing the area type (e.g., from Carpet Area to Super Built-up Area) without adjusting the rate causes incorrect pricing.
+there is an issue area_price_pre_sqft  when multiply with areawithtyle price is sanme but if we change carpet area and
+buildup area to super buildup area and multiply with price_per_sqft Price change thats an issue
+
+    We have:
+        `area_price_pre_sqft` (price per sq. ft.)
+        `areaWithType` (area + type) → could be Carpet, Builtup, or Super Builtup
+        `price in crore` (total price)
+
+    When you multiply:
+        area  price_per_sqft = total_price
+        It only works correctly if the `area` and `price_per_sqft` use the same basis.
+
+    The mismatch
+        If the `price_per_sqft` is based on Carpet Area, multiplying it by Super Builtup Area will inflate the total
+        price, Because Super Builtup is always larger than Carpet Area.Or vice versa: If your `price_per_sqft` is based
+        on SBA, but you multiply it by Carpet Area, your total will look too low.
+
+    Why this happens
+        Builders often advertise lower per sq.ft. rates by quoting Super Builtup
+        Actual `price_per_sqft` for Carpet is always higher, because the area is smaller.
+
+
+So what’s the solution?
+
+    RULE:
+        If you adjust the area, you must also adjust the `price_per_sqft` to keep the total price the same.
+        How to adjust `price_per_sqft`
+
+    Use:
+        Original Price = Area\Price per sq.ft.
+
+        So if you change the area, the new `price_per_sqft` should be:
+            New Price per sq.ft. = Original Price\New Area
+            Example
+                |                                             | Carpet Area | SBA | price per sq.ft. | Total Price |
+                | Original                                    | 1000        | —   | ₹5000            | ₹50,00,000  |
+                | You convert Carpet → SBA: 1000 / 0.7 = 1429 |             |     | ?                |             |
+
+            You must adjust:
+                New price per sq.ft. = 50,00,000\1429 = 3500
+                So the total price stays the same.
+    Now you can multiply:
+         df['price_check'] = df['adjusted_area']  df['adjusted_price_per_sqft']
+         It will match the original total price.
+
+   key takeaway
+        Never change just the area.
+        Always adjust the `price_per_sqft` to keep total price consistent.
+
+
+ 4️⃣ Report the outliers
+If this is for a report or presentation:
+
+Show the boxplot with and without outliers.
+
+Explain why you kept them — they might be valid luxury properties.
+
